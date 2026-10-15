@@ -25,6 +25,7 @@ source.exclude_dirs = bin,.buildozer,__pycache__,build_tools
 
 version = 1.0.0
 
+p4a.version = 2024.05.06
 # ------------------------------ Python 依赖 -----------------------------------
 # 说明：
 #   python3  —— 打包时会把 Python 解释器一起打进 APK
@@ -34,7 +35,7 @@ version = 1.0.0
 #   cffi     —— pyzbar 的底层依赖，显式写上更稳
 #
 # 注意：不要在这里再写 libzbar —— pyzbar 的配方会自动把 libzbar 一起编译进来。
-requirements = python3,kivy,pillow,pyzbar,cffi
+requirements = python3,kivy,pillow
 
 # ------------------------------ 界面设置 --------------------------------------
 orientation = portrait
