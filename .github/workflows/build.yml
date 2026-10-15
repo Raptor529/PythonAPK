@@ -2,7 +2,7 @@ name: Build Android APK
 on:
   workflow_dispatch:
   push:
-分支: [ main ]
+    branches: [ main ]
 
 jobs:
   build-apk:
