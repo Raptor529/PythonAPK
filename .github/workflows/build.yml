@@ -50,6 +50,11 @@ jobs:
         run: |
           set -o pipefail
           export PATH="$HOME/.local/bin:$PATH"
+          # =====新增这两行，解决大仓库git clone中断=====
+          git config --global http.postBuffer 1073741824
+          git config --global http.lowSpeedLimit 1000
+          git config --global http.lowSpeedTime 600
+          # ===========================================
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
           sudo rm -rf /usr/local/lib/android
