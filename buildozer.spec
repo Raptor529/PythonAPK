@@ -25,7 +25,8 @@ source.exclude_dirs = bin,.buildozer,__pycache__,build_tools
 
 version = 1.0.0
 
-p4a.version = 2024.05.06
+# p4a.version = 2024.05.06
+p4a.branch = stable
 # ------------------------------ Python 依赖 -----------------------------------
 # 说明：
 #   python3  —— 打包时会把 Python 解释器一起打进 APK
