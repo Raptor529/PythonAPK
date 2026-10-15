@@ -1,9 +1,8 @@
 name: Build Android APK
-
 on:
-  workflow_dispatch:  # 手动触发
+  workflow_dispatch:
   push:
-分支: [ main ]  # 推送到main时自动触发
+分支: [ main ]
 
 jobs:
   build-apk:
@@ -11,6 +10,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Cache buildozer
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.buildozer
+            ~/.local/share/python-for-android
+          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -34,6 +41,11 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install buildozer cython==0.29.37
 
+      - name: Configure Gradle Mirror
+        run: |
+          mkdir -p ~/.gradle
+          echo "allprojects{ repositories { maven { url 'https://maven.aliyun.com/repository/public' } google() mavenCentral() } }" > ~/.gradle/init.gradle
+
       - name: Build APK with Buildozer
         run: |
           set -o pipefail
@@ -43,7 +55,7 @@ jobs:
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
-        if: success
+        if: success()
         with:
           name: BarcodePDFApp-apk
           path: bin/*.apk
@@ -54,5 +66,5 @@ jobs:
         if: failure()
         with:
           name: build-log
-          path: .buildozer/**/build.log
+          path: build.log
           retention-days: 7
