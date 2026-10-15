@@ -54,7 +54,7 @@ jobs:
           sudo rm -rf /opt/ghc
           sudo rm -rf /usr/local/lib/android
           df -h
-          echo y | buildozer --log-level 2 android debug 2>&1 | tee build.log
+          echo y | buildozer android debug --log-level 2 2>&1 | tee build.log
         working-directory: ${{github.workspace}}
 
       - name: Upload APK artifact
