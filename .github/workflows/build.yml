@@ -1,0 +1,57 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:  # 手动触发
+  push:
+    branches: [ main ]  # 推送到main时自动触发
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            git zip unzip openjdk-17-jdk autoconf libtool pkg-config \
+            zlib1g-dev libncurses5-dev libffi-dev libssl-dev \
+            libsqlite3-dev libbz2-dev libreadline-dev wget cmake \
+            build-essential python3 python3-pip python3-dev \
+            ccache libltdl-dev
+          sudo apt clean
+
+      - name: Install buildozer and python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install buildozer cython==0.29.37
+
+      - name: Build APK with Buildozer
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          yes | buildozer -v android debug 2>&1 | tee build.log
+        working-directory: ${{github.workspace}}
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: BarcodePDFApp-apk
+          path: bin/*.apk
+          retention-days: 30
+
+      - name: Upload build log on failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: build-log
+          path: .buildozer/**/build.log
+          retention-days: 7

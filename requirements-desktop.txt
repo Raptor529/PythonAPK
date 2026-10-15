@@ -1,0 +1,15 @@
+# 在电脑（Windows / macOS / Linux）上运行本项目所需的依赖
+# 安装：pip3 install -r requirements-desktop.txt
+#
+# 注：真正打包成安卓 APK 时，依赖是写在 buildozer.spec 的 requirements 里，
+#     与这个文件无关。
+
+kivy>=2.2.0        # 界面框架
+pillow>=9.0.0      # 图片处理 + 生成 PDF（必备）
+pyzbar>=0.1.9      # 条码识别（需要系统里有 libzbar）
+cffi               # pyzbar 的底层依赖
+
+# 以下三个只有本项目的自检脚本 selftest.py 需要，不装也能运行应用本体
+python-barcode     # 自检时用来造一张条码测试图
+qrcode             # 自检时用来造一张二维码测试图
+pypdf              # 自检时用来校验 PDF 页数
